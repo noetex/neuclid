@@ -63,11 +63,32 @@ create_the_window(void)
 	return Result;
 }
 
+static HGLRC
+create_opengl_context(HDC WindowDC)
+{
+	PIXELFORMATDESCRIPTOR Descriptor = {0};
+	Descriptor.nSize = sizeof(Descriptor);
+	Descriptor.nVersion = 1;
+	Descriptor.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+	Descriptor.iPixelType = PFD_TYPE_RGBA;
+	Descriptor.cColorBits = 32;
+	Descriptor.cDepthBits = 32;
+	int PixelFormat = ChoosePixelFormat(WindowDC, &Descriptor);
+	SetPixelFormat(WindowDC, PixelFormat, &Descriptor);
+	DescribePixelFormat(WindowDC, PixelFormat, sizeof(Descriptor), &Descriptor);
+	HGLRC Result = wglCreateContext(WindowDC);
+	wglMakeCurrent(WindowDC, Result);
+	return Result;
+}
+
 int WINAPI
 wWinMain(HINSTANCE, HINSTANCE, WCHAR*, int)
 {
 	enable_dpi_awareness();
 	HWND Window = create_the_window();
+	HDC WindowDC = GetDC(Window);
+	HGLRC ContextGL = create_opengl_context(WindowDC);
+	Assert(glewInit() == GLEW_OK);
 
 	MSG Message;
 	while(GetMessageW(&Message, 0, 0, 0) > 0)

@@ -27,6 +27,8 @@
 	#define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((DPI_AWARENESS_CONTEXT)-4)
 #endif
 
+#define Assert(Condition) if(Condition); else __debugbreak()
+
 // https://learn.microsoft.com/en-us/windows-hardware/drivers/hid/hid-usages
 enum raw_input_stuff
 {
@@ -42,8 +44,6 @@ enum raw_input_stuff
 	HID_USAGE_GENERIC_KEYPAD = 0x07,
 	HID_USAGE_GENERIC_MULTI_AXIS_CONTROLLER = 0x08,
 };
-
-#define Assert(Condition) if(Condition); else __debugbreak()
 
 static WCHAR WINDOW_TITLE[] = L"Neuclid: Non-Euclidean";
 static WCHAR WNDCLASS_NAME[] = L"neuclid_wndclass";
